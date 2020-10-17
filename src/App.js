@@ -3,6 +3,7 @@ import {cloneDeep} from 'lodash';
 import './App.css';
 
 import Player from './Player'
+import Holes from './Holes'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -36,6 +37,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="App">
+        <Holes />
         {this.state.players.map((p, i) => <Player key={i} player={p} setName={this.setPlayerName.bind(this, i)} incrementScore={this.incrementPlayerScore.bind(this, i)} decrementScore={this.decrementPlayerScore.bind(this, i)} />)}
       </div>
     );
