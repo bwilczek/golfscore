@@ -1,5 +1,5 @@
 import React from 'react';
-import {cloneDeep, remove} from 'lodash';
+import {cloneDeep, remove, sum} from 'lodash';
 import './App.css';
 
 import Player from './Player'
@@ -10,13 +10,13 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       players: [
-        {name: "Bartek", holesWon: [], scores: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}},
-        {name: "Monika", holesWon: [], scores: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}}
+        {name: "Bartek", holesWon: [], leaderStroke: false, leaderMatch: false, scores: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}},
+        {name: "Monika", holesWon: [], leaderStroke: false, leaderMatch: false, scores: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}}
       ]
     }
   }
 
-  setHoleWon(hole, newState) {
+  computeScore(hole, newState) {
     remove(newState.players[0].holesWon, n => parseInt(n) === parseInt(hole))
     remove(newState.players[1].holesWon, n => parseInt(n) === parseInt(hole))
     if(newState.players[0].scores[hole] > newState.players[1].scores[hole]) {
@@ -29,6 +29,16 @@ export default class App extends React.Component {
         newState.players[0].holesWon.push(hole)
       }
     }
+
+    let strokeScore0 = sum(Object.values(newState.players[0].scores))
+    let strokeScore1 = sum(Object.values(newState.players[1].scores))
+    let matchScore0 = newState.players[0].holesWon.length
+    let matchScore1 = newState.players[1].holesWon.length
+
+    newState.players[0].leaderStroke = strokeScore0 < strokeScore1
+    newState.players[1].leaderStroke = strokeScore1 < strokeScore0
+    newState.players[0].leaderMatch = matchScore0 > matchScore1
+    newState.players[1].leaderMatch = matchScore1 > matchScore0
   }
 
   setPlayerName(index, newName) {
@@ -40,7 +50,7 @@ export default class App extends React.Component {
   incrementPlayerScore(index, hole) {
     let newState = cloneDeep(this.state)
     newState.players[index].scores[hole] += 1
-    this.setHoleWon(hole, newState)
+    this.computeScore(hole, newState)
     this.setState(newState)
   }
 
@@ -50,7 +60,7 @@ export default class App extends React.Component {
       return
     }
     newState.players[index].scores[hole] -= 1
-    this.setHoleWon(hole, newState)
+    this.computeScore(hole, newState)
     this.setState(newState)
   }
 
