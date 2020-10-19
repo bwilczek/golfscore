@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap'
 export default class Holes extends React.Component {
   render() {
     return (
-      <span style={{marginTop: '6px', paddingRight: '16px'}}>
+      <span style={{marginTop: '85px', paddingRight: '16px'}}>
         <Button style={{margin: '2px'}} size="sm">1</Button><br />
         <Button style={{margin: '2px'}} size="sm">2</Button><br />
         <Button style={{margin: '2px'}} size="sm">3</Button><br />
@@ -14,6 +14,8 @@ export default class Holes extends React.Component {
         <Button style={{margin: '2px'}} size="sm">7</Button><br />
         <Button style={{margin: '2px'}} size="sm">8</Button><br />
         <Button style={{margin: '2px'}} size="sm">9</Button><br />
+        stroke<br />
+        match
       </span>
     );
   }
