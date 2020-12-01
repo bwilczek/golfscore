@@ -8,12 +8,23 @@ import Holes from './Holes'
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      players: [
-        {name: "Bartek", holesWon: [], leaderStroke: false, leaderMatch: false, scores: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}},
-        {name: "Monika", holesWon: [], leaderStroke: false, leaderMatch: false, scores: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}}
-      ]
+    this.state = this.initialState()
+  }
+
+  persistState() {
+    localStorage.setItem('state', JSON.stringify(this.state))
+  }
+
+  initialState() {
+    if(localStorage.state === undefined) {
+      return {
+        players: [
+          {name: "Bartek", holesWon: [], leaderStroke: false, leaderMatch: false, scores: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}},
+          {name: "Monika", holesWon: [], leaderStroke: false, leaderMatch: false, scores: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0}}
+        ]
+      }
     }
+    return JSON.parse(localStorage.state)
   }
 
   computeScore(hole, newState) {
@@ -44,14 +55,14 @@ export default class App extends React.Component {
   setPlayerName(index, newName) {
     let newState = cloneDeep(this.state)
     newState.players[index].name = newName
-    this.setState(newState)
+    this.setState(newState, this.persistState)
   }
 
   incrementPlayerScore(index, hole) {
     let newState = cloneDeep(this.state)
     newState.players[index].scores[hole] += 1
     this.computeScore(hole, newState)
-    this.setState(newState)
+    this.setState(newState, this.persistState)
   }
 
   decrementPlayerScore(index, hole) {
@@ -61,7 +72,7 @@ export default class App extends React.Component {
     }
     newState.players[index].scores[hole] -= 1
     this.computeScore(hole, newState)
-    this.setState(newState)
+    this.setState(newState, this.persistState)
   }
 
   render() {

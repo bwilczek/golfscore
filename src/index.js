@@ -1,15 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Beforeunload } from 'react-beforeunload';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Beforeunload onBeforeunload={() => 'Scores will be lost if you leave!'}>
-      <App />
-    </Beforeunload>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
